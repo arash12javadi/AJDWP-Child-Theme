@@ -322,7 +322,7 @@ function yoast_seo_admin_remove_columns( $columns ) {
     return $columns;
 }
 
-//------------------------------------- Redirect users to their author page -> make a link in menu with this url `http://User_Author_page` ------------------------------------//
+//------------------------------------- Redirect users to their author page -> make a link in menu with this url `https://User_Author_page` ------------------------------------//
 function custom_menu_link_url() {
     $current_user = wp_get_current_user();
     $author_url = get_author_posts_url($current_user->ID);
@@ -335,7 +335,7 @@ function custom_menu_link_url() {
 add_filter('wp_nav_menu_objects', 'custom_menu_link');
 function custom_menu_link($items) {
     foreach ($items as &$item) {
-        if ($item->url == 'http://User_Author_page') {
+        if ($item->url == 'https://User_Author_page') {
             $item->url = custom_menu_link_url();
         }
     }
@@ -438,7 +438,7 @@ add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
 //---------------- Redirect to the same page after sign-out ----------------//
 
 function hungpd_dot_name_logout_redirect( $logouturl, $redir ){
-    return $logouturl . '&amp;redirect_to=http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    return $logouturl . '&amp;redirect_to=https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 add_filter( 'logout_url', 'hungpd_dot_name_logout_redirect', 10, 2 );
 
