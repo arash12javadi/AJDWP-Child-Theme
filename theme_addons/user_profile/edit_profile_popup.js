@@ -1,7 +1,3 @@
-//--------------------------- Author page media profile edit popup ---------------------------//
-//--------------------------- Author page media profile edit popup ---------------------------//
-//--------------------------- Author page media profile edit popup ---------------------------//
-
 // media library access
 jQuery(document).ready(function($){
     $('#open-media-library').on('click', function(e){
