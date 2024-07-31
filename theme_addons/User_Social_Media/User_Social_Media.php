@@ -13,10 +13,22 @@ function extra_user_profile_fields() {
 
 ?>
 
-
-    <h5 class="fw-bold">Add Your Social Media Links</h5>
-
-    <table class="form-table">
+    <div class="row">
+        <div class="col-11">
+            <h5 class="fw-bold">Add Your Social Media Links</h5>
+        </div>
+        <div class="col-1">
+            <?php if (!is_admin()) : ?>
+            <button id="toggle-social-links" class="user-profile-toggle-btn">+</button>
+            <?php endif; ?>
+        </div>
+    </div>
+    <br>
+    <?php if (!is_admin()) { ?>
+    <table class="form-table" id="social-links-table" style="display: none;">
+    <?php }else{ ?>
+    <table class="form-table" id="social-links-table" style="display: block;">
+    <?php } ?>
     <tr>
         <th><label for="user_facebook">Facebook</label></th>
         <td>
@@ -162,3 +174,37 @@ function User_Social_Media_func(){
 </div>
 
 <?php } ?>
+
+
+<?php 
+
+function has_social_media_links() {
+    $author_id = get_queried_object_id(); // This gets the author ID from the author archive page
+    // Retrieve user data
+    $the_id_of_the_author_page = get_userdata($author_id)->ID;
+    // Define social media fields
+    $social_media_fields = [
+        'user_facebook',
+        'user_twitter',
+        'user_google',
+        'user_instagram',
+        'user_linkedin',
+        'user_youtube',
+        'user_GitHub',
+        'user_StackOverFlow',
+        'user_whatsapp',
+        'user_other'
+    ];
+
+    // Check if any social media fields have a value
+    foreach ($social_media_fields as $field) {
+        if (get_user_meta($the_id_of_the_author_page, $field, true)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+?>

@@ -1,78 +1,185 @@
 <?php  
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
 }
 
+// Register AJAX actions for logged-in users and non-logged-in users
 add_action('wp_ajax_my_action_2', 'like_follow_ajax_func');
 add_action('wp_ajax_nopriv_my_action_2', 'like_follow_ajax_func');
+
 function like_follow_ajax_func() {
-
     global $wpdb;
-    $userid = $_POST['data']['userid'];
-    $postid = $_POST['data']['postid'];
-    $authorid = $_POST['data']['authorid'];
-    $btntype = $_POST['data']['btntype'];
 
-
-    if($btntype==="like"){
-        $query_like = $wpdb->prepare("SELECT COUNT(*) AS cntpost FROM wp_ajdwp_like_follow WHERE post_id=".$postid." and user_id=".$userid);
-        $result_like =$wpdb->get_results($query_like);
-        if($result_like[0]->cntpost == 0){
-            $insertquery_like = $wpdb->prepare("INSERT INTO wp_ajdwp_like_follow(user_id, post_id, like_stat) values(".$userid.", ".$postid.", 'like')");
-            $wpdb->query($insertquery_like);
-        }else {
-            $updatequery = $wpdb->prepare("UPDATE wp_ajdwp_like_follow SET like_stat='like' where user_id=" . $userid . " and post_id=" . $postid);
-            $wpdb->query($updatequery);
-        }
+    // Ensure `$_POST['data']` is set and not empty
+    if (empty($_POST['data'])) {
+        wp_send_json_error('Invalid data.');
+        return;
     }
 
-    if($btntype==="unlike"){
-        $updatequery_unlike = $wpdb->prepare("UPDATE wp_ajdwp_like_follow SET like_stat='unlike' where user_id=" . $userid . " and post_id=" . $postid);
-        $wpdb->query($updatequery_unlike);
+    // Sanitize and validate input data
+    $data = $_POST['data'];
+    $user_id = intval($data['userid']);
+    $post_id = isset($data['postid']) ? intval($data['postid']) : 0;
+    $author_id = isset($data['authorid']) ? intval($data['authorid']) : 0;
+    $btn_type = sanitize_text_field($data['btntype']);
+
+    // Validate the button type
+    if (!in_array($btn_type, ['like', 'unlike', 'follow', 'unfollow'])) {
+        wp_send_json_error('Invalid action type.');
+        return;
     }
 
-
-    if($btntype==="follow"){
-        $query_follow = $wpdb->prepare("SELECT COUNT(*) AS cntpost FROM wp_ajdwp_like_follow WHERE author_id=".$authorid." and user_id=".$userid);
-        $result_follow = $wpdb->get_results($query_follow);
-
-        if($result_follow[0]->cntpost == 0){
-            $insertquery_follow = $wpdb->prepare("INSERT INTO wp_ajdwp_like_follow(user_id, author_id, follow_stat) values(".$userid.", ".$authorid.", 'follow')");
-            $wpdb->query($insertquery_follow);
-        }else {
-            $updatequery_follow = $wpdb->prepare("UPDATE wp_ajdwp_like_follow SET follow_stat='follow' where user_id=" . $userid . " and author_id=" . $authorid);
-            $wpdb->query($updatequery_follow);
-        }
+    // Perform action based on button type
+    switch ($btn_type) {
+        case 'like':
+            handle_like_action($user_id, $post_id);
+            break;
+        case 'unlike':
+            handle_unlike_action($user_id, $post_id);
+            break;
+        case 'follow':
+            handle_follow_action($user_id, $author_id);
+            break;
+        case 'unfollow':
+            handle_unfollow_action($user_id, $author_id);
+            break;
     }
 
-    if($btntype==="unfollow"){
-        $updatequery_unfollow = $wpdb->prepare("UPDATE wp_ajdwp_like_follow SET follow_stat='unfollow' where user_id=" . $userid . " and author_id=" . $authorid);
-        $updatequery_unfollow = "UPDATE wp_ajdwp_like_follow SET follow_stat='unfollow' where user_id=" . $userid . " and author_id=" . $authorid;
-        $wpdb->query($updatequery_unfollow);
-    }
+    // Fetch updated counts
+    $total_likes = get_total_likes($post_id);
+    $total_followers = get_total_followers($author_id);
 
-
-
-    //count numbers of like and unlike in post
-    $query_total_like = $wpdb->prepare("SELECT COUNT(*) AS cntLike FROM wp_ajdwp_like_follow WHERE like_stat = 'like' and post_id = ".$postid);
-    $result_total_like = $wpdb->get_results($query_total_like);
-    $totalLikes = $result_total_like[0]->cntLike;
-
-
-    //count numbers of followers and haters of the author
-    $query_total_follow = $wpdb->prepare("SELECT COUNT(*) AS cntfollow FROM wp_ajdwp_like_follow WHERE follow_stat = 'follow' and author_id = ".$authorid);
-    $result_total_follow = $wpdb->get_results($query_total_follow);
-    $totalfollow = $result_total_follow[0]->cntfollow;
-
-
-    $return_arr = array(
-        "likes"=>$totalLikes,
-        "followers"=>$totalfollow
-    );
-
-    wp_send_json_success($return_arr);
-
+    // Send response
+    wp_send_json_success([
+        "likes" => $total_likes,
+        "followers" => $total_followers
+    ]);
 }
 
+function handle_like_action($user_id, $post_id) {
+    global $wpdb;
+
+    // Ensure post ID is valid
+    if (empty($post_id)) {
+        return;
+    }
+
+    // Check if a like already exists
+    $existing_like = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE post_id = %d AND user_id = %d",
+        $post_id, $user_id
+    ));
+
+    if ($existing_like == 0) {
+        // Insert new like
+        $wpdb->insert('wp_ajdwp_like_follow', [
+            'user_id' => $user_id,
+            'post_id' => $post_id,
+            'like_stat' => 'like'
+        ]);
+    } else {
+        // Update existing like
+        $wpdb->update('wp_ajdwp_like_follow', [
+            'like_stat' => 'like'
+        ], [
+            'user_id' => $user_id,
+            'post_id' => $post_id
+        ]);
+    }
+}
+
+function handle_unlike_action($user_id, $post_id) {
+    global $wpdb;
+
+    // Ensure post ID is valid
+    if (empty($post_id)) {
+        return;
+    }
+
+    // Update like status to 'unlike'
+    $wpdb->update('wp_ajdwp_like_follow', [
+        'like_stat' => 'unlike'
+    ], [
+        'user_id' => $user_id,
+        'post_id' => $post_id
+    ]);
+}
+
+function handle_follow_action($user_id, $author_id) {
+    global $wpdb;
+
+    // Ensure author ID is valid
+    if (empty($author_id)) {
+        return;
+    }
+
+    // Check if a follow already exists
+    $existing_follow = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE author_id = %d AND user_id = %d",
+        $author_id, $user_id
+    ));
+
+    if ($existing_follow == 0) {
+        // Insert new follow
+        $wpdb->insert('wp_ajdwp_like_follow', [
+            'user_id' => $user_id,
+            'author_id' => $author_id,
+            'follow_stat' => 'follow'
+        ]);
+    } else {
+        // Update existing follow
+        $wpdb->update('wp_ajdwp_like_follow', [
+            'follow_stat' => 'follow'
+        ], [
+            'user_id' => $user_id,
+            'author_id' => $author_id
+        ]);
+    }
+}
+
+function handle_unfollow_action($user_id, $author_id) {
+    global $wpdb;
+
+    // Ensure author ID is valid
+    if (empty($author_id)) {
+        return;
+    }
+
+    // Update follow status to 'unfollow'
+    $wpdb->update('wp_ajdwp_like_follow', [
+        'follow_stat' => 'unfollow'
+    ], [
+        'user_id' => $user_id,
+        'author_id' => $author_id
+    ]);
+}
+
+function get_total_likes($post_id) {
+    global $wpdb;
+
+    // Ensure post ID is valid
+    if (empty($post_id)) {
+        return 0;
+    }
+
+    return $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE like_stat = 'like' AND post_id = %d",
+        $post_id
+    ));
+}
+
+function get_total_followers($author_id) {
+    global $wpdb;
+
+    // Ensure author ID is valid
+    if (empty($author_id)) {
+        return 0;
+    }
+
+    return $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE follow_stat = 'follow' AND author_id = %d",
+        $author_id
+    ));
+}
 ?>

@@ -18,19 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class('post-items shadow rounded mb-3 '); ?>>
 
 <!-- //------------------------------------Row Date and Author-------------------------------------// -->
-<?php if ( !is_page()  ) { ?>
+<?php if(!is_page()){ ?>
 
 	<div class="row p-4 border-bottom">
 
 		<div class="post-date-author text-start text-uppercase">
-
+	<?php 
+		$options = get_option('AJDWP_theme_options');
+		if(!empty($options['post_publish_date'])){ 
+	?>
 			<span class="span-postdate ">Post Date: &nbsp;</span>
 			<span class="post-date"> 
 				<a href="<?php echo esc_url(get_month_link(get_post_time('Y'),get_post_time('m'))); ?>"><span><?php echo esc_html(get_the_date('j')); ?>/</span><?php echo esc_html(get_the_date("M/Y")); ?></a> 
 			</span>
-
 			&nbsp;&nbsp;||&nbsp;&nbsp;
-
+	<?php } ?>
 			<span class="span-writtenby">Written By: &nbsp;</span>
 			<span class="post-author"> 
 				<a href="<?php echo get_author_posts_url (get_the_author_meta('ID'))?>"><?php echo get_the_author(); ?></a> 
@@ -160,7 +162,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php } ?>
 
-	<?php if(is_page()){ ?>
+	<?php 
+	$options = get_option('AJDWP_theme_options');
+	if(is_page() && !empty($options['page_publish_date'])){ 
+	?>
 		<div class="col-8">
 
 			<div class="post-date-author text-start text-uppercase">
@@ -178,16 +183,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</div>
 
-	<div class="col-4 text-end">
+	<?php 
+		$options = get_option('AJDWP_theme_options');
+		if (!empty($options['post_views'])) {
+	?>
+	<div class="col-4 text-end AJDWP-theme-view-counter">
 		<?php 
-
-		if(is_single() || is_page()){
-			setPostViews(get_the_ID());
-		}
-
-		echo getPostViews(get_the_ID());
+			if (is_single() || is_page() || is_archive()) {
+				echo esc_html(getPostViews(get_the_ID()));
+			}
 		?>
 	</div>
+	<?php } ?>
 
 </div>
 

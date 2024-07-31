@@ -92,7 +92,8 @@ if ( ! defined( 'ABSPATH' ) ) {
                             }
                             $('#user-register-message').addClass('alert alert-danger').html(htmlContent);
                         } else {
-                            var success_gif_anim = '<img src="https://arashjavadi.com/wp-content/uploads/2023/12/arashjavadi.com-camel-gif-animation-success-message-.gif" alt="Success Gif"><br/><a href="<?php echo get_home_url();?>" class="suc_home_btn">&#8592;Go to Home</a>';
+                            //var success_gif_anim = '<img src="https://arashjavadi.com/wp-content/uploads/2023/12/arashjavadi.com-camel-gif-animation-success-message-.gif" alt="Success Gif"><br/><a href="<?php //echo get_home_url();?>" class="suc_home_btn">&#8592;Go to Home</a>';
+                            var success_gif_anim = '<img src="<?php echo get_stylesheet_directory_uri(); ?>/camel-gif-animation-success-message.gif" alt="Success Gif"><br/><a href="<?php echo get_home_url();?>" class="suc_home_btn">&#8592;Go to Home</a>';
                             $('#user-register-message').addClass('alert alert-success').html('Account created successfully...!!!');
                             $('#success_register_gif_anim').html(success_gif_anim);
                             $('#AJDWP_registration_form').hide();

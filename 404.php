@@ -19,7 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 .page_404  img{ width:100%;}
 
 .four_zero_four_bg{
-    background-image: url(https://arashjavadi.com/wp-content/uploads/2023/12/arashjavadi.com-caveman-gif-animation-page-404.gif);
+    /* background-image: url(https://arashjavadi.com/wp-content/uploads/2023/12/arashjavadi.com-caveman-gif-animation-page-404.gif); */
+    background-image: url('<?php echo get_stylesheet_directory_uri(); ?>/caveman-gif-animation-page-404.gif');
     height: 500px;
     background-position: center;
 }

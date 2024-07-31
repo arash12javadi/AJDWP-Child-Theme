@@ -1,43 +1,30 @@
 <?php
-// if ( ! defined( 'ABSPATH' ) ) {
-// 	exit; // Exit if accessed directly.
-// }
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
+global $wpdb;
+$post_id = get_the_ID();
+$user_id = get_current_user_id();
+$author_id = get_the_author_meta('ID');
 
-    //count numbers of like and unlike in post
-    global $wpdb;
-    $postid     = get_the_ID();
-    $userid     = get_current_user_id();
-    $authorid   = get_the_author_meta('ID');
+$totalLikes = $wpdb->get_var($wpdb->prepare(
+    "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE like_stat = 'like' AND post_id = %d",
+    $post_id
+));
 
+$totalfollow = $wpdb->get_var($wpdb->prepare(
+    "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE follow_stat = 'follow' AND author_id = %d",
+    $author_id
+));
 
+$like_exsists = $wpdb->get_var($wpdb->prepare(
+    "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE post_id = %d AND user_id = %d AND like_stat = 'like'",
+    $post_id, $user_id
+));
 
-    $query_like = $wpdb->prepare("SELECT COUNT(*) AS cntLike FROM wp_ajdwp_like_follow WHERE like_stat = 'like' and post_id = ".$postid);
-    $result_like = $wpdb->get_results($query_like);
-    if(!empty($result_like)){
-        $totalLikes = $result_like[0]->cntLike;
-    }
-
-
-    $query_follow = $wpdb->prepare("SELECT COUNT(*) AS cntfollow FROM wp_ajdwp_like_follow WHERE follow_stat = 'follow' and author_id = ".$authorid);
-    $result_follow = $wpdb->get_results($query_follow);
-    if(!empty($result_follow)){
-        $totalfollow = $result_follow[0]->cntfollow;
-    }
-
-
-    $query_like_exsists = $wpdb->prepare("SELECT COUNT(*) AS cntLikeExsists FROM wp_ajdwp_like_follow WHERE post_id=".$postid." and user_id=".$userid." and like_stat = 'like'");
-    $result_like_exsists = $wpdb->get_results($query_like_exsists);
-    if(!empty($result_like_exsists)){
-        $like_exsists = $result_like_exsists[0]->cntLikeExsists;
-    }
-
-
-    $query_follow_exsists = $wpdb->prepare("SELECT COUNT(*) AS cntFollowExsists FROM wp_ajdwp_like_follow WHERE author_id=".$authorid." and user_id=".$userid." and follow_stat = 'follow'");
-    $result_follow_exsists = $wpdb->get_results($query_follow_exsists);
-    if(!empty($result_follow_exsists)){
-        $follow_exsists = $result_follow_exsists[0]->cntFollowExsists;
-    }
-
-
+$follow_exsists = $wpdb->get_var($wpdb->prepare(
+    "SELECT COUNT(*) FROM wp_ajdwp_like_follow WHERE author_id = %d AND user_id = %d AND follow_stat = 'follow'",
+    $author_id, $user_id
+));
 ?>

@@ -26,7 +26,12 @@ function custom_user_login() {
 		'remember' => true,
 	);
 
-	$user = wp_signon($creds, true);
+	$options = get_option('AJDWP_theme_options');
+	if(!empty($options['secure_login'])){
+		$user = wp_signon($creds, true);
+	}else{
+		$user = wp_signon($creds, false);
+	}
 
 	if (!is_wp_error($user)) {
 		// Get the user object

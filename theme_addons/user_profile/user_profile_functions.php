@@ -10,101 +10,191 @@ if ( ! defined( 'ABSPATH' ) ) {
 //__________________________________________________________________________//
 //__________________________________________________________________________//
 
+// function AJDWP_add_new_user() {
+//     check_ajax_referer('ajax_user_register_nonce', 'AJDWP_csrf_nounce');
+//     // if (isset( $_POST["AJDWP_csrf"] ) && wp_verify_nonce($_POST['AJDWP_csrf'], 'AJDWP-csrf')) {
+//         $user_login		            = $_POST["AJDWP_user_login"];
+//         $cleaned_input_user_login   = sanitize_and_validate_input($user_login);
+
+//         $user_email		            = $_POST["AJDWP_user_email"];
+//         $cleanedEmail               = sanitize_and_validate_email($user_email);
+
+//         $user_first 	            = $_POST["AJDWP_user_first"];
+//         $cleaned_input_user_first   = sanitize_and_validate_input($user_first);
+
+//         $user_last	 	            = $_POST["AJDWP_user_last"];
+//         $cleaned_input_user_last    = sanitize_and_validate_input($user_last);
+
+//         $user_pass		            = $_POST["AJDWP_user_pass"];
+//         $cleaned_psw                = stripslashes($user_pass);
+//         $pass_confirm 	            = $_POST["AJDWP_user_pass_confirm"];
+
+//         $user_role 	                = sanitize_and_validate_input($_POST["AJDWP_user_role"]);
+        
+//         // this is required for username checks
+//         // require_once(ABSPATH . WPINC . '/registration.php');
+        
+//         if(username_exists($cleaned_input_user_login)) {
+//             // Username already registered
+//             AJDWP_errors()->add('username_unavailable', __('Username already taken'));
+//         }
+//         if(!validate_username($cleaned_input_user_login)) {
+//             // invalid username
+//             AJDWP_errors()->add('username_invalid', __('Invalid username'));
+//         }
+//         if($cleaned_input_user_login == '') {
+//             // empty username
+//             AJDWP_errors()->add('username_empty', __('Please enter a username'));
+//         }
+//         if(!is_email($cleanedEmail)) {
+//             //invalid email
+//             AJDWP_errors()->add('email_invalid', __('Invalid email'));
+//         }
+//         if(email_exists($cleanedEmail)) {
+//             //Email address already registered
+//             AJDWP_errors()->add('email_used', __('Email already registered'));
+//         }
+//         if($cleaned_psw == '') {
+//             // passwords do not match
+//             AJDWP_errors()->add('password_empty', __('Please enter a password'));
+//         }
+//         if($user_pass != $pass_confirm) {
+//             // passwords do not match
+//             AJDWP_errors()->add('password_mismatch', __('Passwords do not match'));
+//         }
+        
+//         $errors = AJDWP_errors()->get_error_messages();
+        
+//         // if no errors then cretate user
+//         if (!empty($errors)) {
+//             wp_send_json_error(array('errors' => $errors));
+//         }else{
+//         // if(empty($errors)) {       
+//             $new_user_id = wp_insert_user(array(
+//                     'user_login'		=> $cleaned_input_user_login,
+//                     'user_pass'	 		=> $cleaned_psw,
+//                     'user_email'		=> $cleanedEmail,
+//                     'first_name'		=> $cleaned_input_user_first,
+//                     'last_name'			=> $cleaned_input_user_last,
+//                     'user_registered'	=> date('Y-m-d H:i:s'),
+//                     'role'				=> $user_role
+//                 )
+//             );
+//             if($new_user_id) {
+//                 // send an email to the admin
+//                 wp_new_user_notification($new_user_id);
+                
+//                 // log the new user in
+//                 wp_setcookie($cleaned_input_user_login, $cleaned_psw, true);
+//                 wp_set_current_user($new_user_id, $cleaned_input_user_login);	
+//                 do_action('wp_login', $cleaned_input_user_login);
+                
+//                 // send the newly created user to the home page after logging them in
+//                 wp_redirect(home_url()); exit;
+//             }
+
+//         }
+
+
+//         // Return the errors as part of the response
+
+        
+//     // } //end if (isset( $_POST["AJDWP_csrf"] ) &&...
+// }
+// // add_action('wp', 'AJDWP_add_new_user');
+
+// add_action('wp_ajax_user_register_ajax', 'AJDWP_add_new_user');
+// add_action('wp_ajax_nopriv_user_register_ajax', 'AJDWP_add_new_user');
+
+
+
+
+
+
+
 function AJDWP_add_new_user() {
     check_ajax_referer('ajax_user_register_nonce', 'AJDWP_csrf_nounce');
-    // if (isset( $_POST["AJDWP_csrf"] ) && wp_verify_nonce($_POST['AJDWP_csrf'], 'AJDWP-csrf')) {
-        $user_login		            = $_POST["AJDWP_user_login"];
-        $cleaned_input_user_login   = sanitize_and_validate_input($user_login);
+    
+    $user_login = $_POST["AJDWP_user_login"];
+    $cleaned_input_user_login = sanitize_user($user_login);
 
-        $user_email		            = $_POST["AJDWP_user_email"];
-        $cleanedEmail               = sanitize_and_validate_email($user_email);
+    $user_email = $_POST["AJDWP_user_email"];
+    $cleanedEmail = sanitize_email($user_email);
 
-        $user_first 	            = $_POST["AJDWP_user_first"];
-        $cleaned_input_user_first   = sanitize_and_validate_input($user_first);
+    $user_first = $_POST["AJDWP_user_first"];
+    $cleaned_input_user_first = sanitize_text_field($user_first);
 
-        $user_last	 	            = $_POST["AJDWP_user_last"];
-        $cleaned_input_user_last    = sanitize_and_validate_input($user_last);
+    $user_last = $_POST["AJDWP_user_last"];
+    $cleaned_input_user_last = sanitize_text_field($user_last);
 
-        $user_pass		            = $_POST["AJDWP_user_pass"];
-        $cleaned_psw                = stripslashes($user_pass);
-        $pass_confirm 	            = $_POST["AJDWP_user_pass_confirm"];
+    $user_pass = $_POST["AJDWP_user_pass"];
+    $cleaned_psw = stripslashes($user_pass);
+    $pass_confirm = $_POST["AJDWP_user_pass_confirm"];
 
-        $user_role 	                = sanitize_and_validate_input($_POST["AJDWP_user_role"]);
+    $user_role = sanitize_text_field($_POST["AJDWP_user_role"]);
+    
+    // No need to include registration.php, remove this line
+    // require_once(ABSPATH . WPINC . '/registration.php');
+    
+    if (username_exists($cleaned_input_user_login)) {
+        AJDWP_errors()->add('username_unavailable', __('Username already taken'));
+    }
+    if (!validate_username($cleaned_input_user_login)) {
+        AJDWP_errors()->add('username_invalid', __('Invalid username'));
+    }
+    if ($cleaned_input_user_login == '') {
+        AJDWP_errors()->add('username_empty', __('Please enter a username'));
+    }
+    if (!is_email($cleanedEmail)) {
+        AJDWP_errors()->add('email_invalid', __('Invalid email'));
+    }
+    if (email_exists($cleanedEmail)) {
+        AJDWP_errors()->add('email_used', __('Email already registered'));
+    }
+    if ($cleaned_psw == '') {
+        AJDWP_errors()->add('password_empty', __('Please enter a password'));
+    }
+    if ($user_pass != $pass_confirm) {
+        AJDWP_errors()->add('password_mismatch', __('Passwords do not match'));
+    }
+    
+    $errors = AJDWP_errors()->get_error_messages();
+    
+    if (!empty($errors)) {
+        wp_send_json_error(array('errors' => $errors));
+    } else {
+        $new_user_id = wp_insert_user(array(
+            'user_login'        => $cleaned_input_user_login,
+            'user_pass'         => $cleaned_psw,
+            'user_email'        => $cleanedEmail,
+            'first_name'        => $cleaned_input_user_first,
+            'last_name'         => $cleaned_input_user_last,
+            'user_registered'   => date('Y-m-d H:i:s'),
+            'role'              => $user_role
+        ));
         
-        // this is required for username checks
-        require_once(ABSPATH . WPINC . '/registration.php');
-        
-        if(username_exists($cleaned_input_user_login)) {
-            // Username already registered
-            AJDWP_errors()->add('username_unavailable', __('Username already taken'));
-        }
-        if(!validate_username($cleaned_input_user_login)) {
-            // invalid username
-            AJDWP_errors()->add('username_invalid', __('Invalid username'));
-        }
-        if($cleaned_input_user_login == '') {
-            // empty username
-            AJDWP_errors()->add('username_empty', __('Please enter a username'));
-        }
-        if(!is_email($cleanedEmail)) {
-            //invalid email
-            AJDWP_errors()->add('email_invalid', __('Invalid email'));
-        }
-        if(email_exists($cleanedEmail)) {
-            //Email address already registered
-            AJDWP_errors()->add('email_used', __('Email already registered'));
-        }
-        if($cleaned_psw == '') {
-            // passwords do not match
-            AJDWP_errors()->add('password_empty', __('Please enter a password'));
-        }
-        if($user_pass != $pass_confirm) {
-            // passwords do not match
-            AJDWP_errors()->add('password_mismatch', __('Passwords do not match'));
-        }
-        
-        $errors = AJDWP_errors()->get_error_messages();
-        
-        // if no errors then cretate user
-        if (!empty($errors)) {
-            wp_send_json_error(array('errors' => $errors));
-        }else{
-        // if(empty($errors)) {       
-            $new_user_id = wp_insert_user(array(
-                    'user_login'		=> $cleaned_input_user_login,
-                    'user_pass'	 		=> $cleaned_psw,
-                    'user_email'		=> $cleanedEmail,
-                    'first_name'		=> $cleaned_input_user_first,
-                    'last_name'			=> $cleaned_input_user_last,
-                    'user_registered'	=> date('Y-m-d H:i:s'),
-                    'role'				=> $user_role
-                )
-            );
-            if($new_user_id) {
-                // send an email to the admin
-                wp_new_user_notification($new_user_id);
-                
-                // log the new user in
-                wp_setcookie($cleaned_input_user_login, $cleaned_psw, true);
-                wp_set_current_user($new_user_id, $cleaned_input_user_login);	
-                do_action('wp_login', $cleaned_input_user_login);
-                
-                // send the newly created user to the home page after logging them in
-                wp_redirect(home_url()); exit;
-            }
+        if ($new_user_id) {
+            // Send an email to the admin
+            wp_new_user_notification($new_user_id);
 
+            // Authenticate and log the new user in
+            wp_set_auth_cookie($new_user_id, true);
+            wp_set_current_user($new_user_id, $cleaned_input_user_login);	
+            do_action('wp_login', $cleaned_input_user_login, get_userdata($new_user_id));
+            
+            // Redirect to the home page after logging in
+            wp_redirect(home_url());
+            exit;
         }
-
-
-        // Return the errors as part of the response
-
-        
-    // } //end if (isset( $_POST["AJDWP_csrf"] ) &&...
+    }
 }
-// add_action('wp', 'AJDWP_add_new_user');
 
 add_action('wp_ajax_user_register_ajax', 'AJDWP_add_new_user');
 add_action('wp_ajax_nopriv_user_register_ajax', 'AJDWP_add_new_user');
+
+
+
+
 
 
 
@@ -356,66 +446,66 @@ function handle_password_reset() {
 add_action('template_redirect', 'handle_password_reset');
 
 //------------------------------------- Delete Account Ajax ------------------------------------//
-// AJAX handler for deleting the user account
-function delete_user_account() {
-    // Verify the nonce
-    $nonce = $_POST['nonce'];
-    if (!wp_verify_nonce($nonce, 'delete_user_nonce')) {
-        die('Invalid nonce');
-    }
+// // AJAX handler for deleting the user account
+// function delete_user_account() {
+//     // Verify the nonce
+//     $nonce = $_POST['nonce'];
+//     if (!wp_verify_nonce($nonce, 'delete_user_nonce')) {
+//         die('Invalid nonce');
+//     }
 
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_user_account') {
-        $current_user = wp_get_current_user();
-        if (!in_array('administrator', $current_user->roles)) {
-            // Get the current user ID
-            $user_id = get_current_user_id();
+//     if (isset($_POST['action']) && $_POST['action'] === 'delete_user_account') {
+//         $current_user = wp_get_current_user();
+//         if (!in_array('administrator', $current_user->roles)) {
+//             // Get the current user ID
+//             $user_id = get_current_user_id();
 
-            // Delete all posts and comments by the user
-            $args_posts = array('author' => $user_id, 'posts_per_page' => -1);
-            $user_posts = get_posts($args_posts);
+//             // Delete all posts and comments by the user
+//             $args_posts = array('author' => $user_id, 'posts_per_page' => -1);
+//             $user_posts = get_posts($args_posts);
 
-            foreach ($user_posts as $post) {
-                wp_delete_post($post->ID, true);
-            }
+//             foreach ($user_posts as $post) {
+//                 wp_delete_post($post->ID, true);
+//             }
 
-            // Remove all comments by the user
-            $args_comments = array('user_id' => $user_id);
-            $user_comments = get_comments($args_comments);
+//             // Remove all comments by the user
+//             $args_comments = array('user_id' => $user_id);
+//             $user_comments = get_comments($args_comments);
 
-            foreach ($user_comments as $comment) {
-                wp_delete_comment($comment->comment_ID, true);
-            }
+//             foreach ($user_comments as $comment) {
+//                 wp_delete_comment($comment->comment_ID, true);
+//             }
 
-            // Delete user's files (if applicable)
+//             // Delete user's files (if applicable)
 
-            // Delete the user
-            wp_delete_user($user_id);
+//             // Delete the user
+//             wp_delete_user($user_id);
             
-            global $wpdb;
+//             global $wpdb;
 
-            // Set the table name
-            $table_name = $wpdb->prefix . 'ajdwp_like_follow';
+//             // Set the table name
+//             $table_name = $wpdb->prefix . 'ajdwp_like_follow';
             
-            // User ID to delete
-            $user_id_to_delete = get_current_user_id();
+//             // User ID to delete
+//             $user_id_to_delete = get_current_user_id();
             
-            // Execute the delete query
-            $wpdb->query(
-                $wpdb->prepare(
-                    "DELETE FROM $table_name WHERE user_id = %d OR author_id = %d",
-                    $user_id_to_delete,
-                    $user_id_to_delete
-                )
-            );
+//             // Execute the delete query
+//             $wpdb->query(
+//                 $wpdb->prepare(
+//                     "DELETE FROM $table_name WHERE user_id = %d OR author_id = %d",
+//                     $user_id_to_delete,
+//                     $user_id_to_delete
+//                 )
+//             );
 
-        }
+//         }
         
-    }
+//     }
 
-    die();
-}
-add_action('wp_ajax_delete_user_account', 'delete_user_account');
-add_action('wp_ajax_nopriv_delete_user_account', 'delete_user_account');
+//     die();
+// }
+// add_action('wp_ajax_delete_user_account', 'delete_user_account');
+// add_action('wp_ajax_nopriv_delete_user_account', 'delete_user_account');
 
 
 //------------------------------------- Admin Button to make needed pages ------------------------------------//

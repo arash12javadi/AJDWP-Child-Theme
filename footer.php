@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
         }
 ?>
 
+<?php do_action('ajdwp_theme_before_footer'); ?>
+
 <footer class="bg-dark text-center text-white mt-5 ">
         
         <!-- Grid container -->
@@ -81,6 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <!-- <div class="  footer_widget_1 d-flex align-items-center align-self-center my-3"> -->
         <div class="  footer_widget_1 d-flex align-items-center align-self-center">
                 <?php dynamic_sidebar('AJDWP-footer-widget-1'); ?>
+                <?php do_action( 'AJDWP_theme_footer_widget' ); ?>
         </div>
 
 
@@ -97,9 +100,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 </footer>
 
-
 <?php wp_footer(); ?>
-        <script src="<?php echo get_home_url();?>/wp-content/themes/Hello-Elementor-Child-Theme/theme_addons/Like_follow/Like_Follow_Ajax.js"></script>
-<!--         <script src="<?php //echo get_home_url();?>/wp-content/themes/AJDWP_child_theme/js/shop_page.js"></script> -->
+
+<?php do_action('ajdwp_theme_after_footer'); ?>
+
 </body>
 </html>
