@@ -97,3 +97,27 @@ if (AJDWP_myInput_rpf) {
     }
 }
 
+//------------------------------------- media library access in edit profile popup------------------------------------//
+jQuery(document).ready(function($){
+    $('#open-media-library').on('click', function(e){
+        e.preventDefault();
+
+        var mediaFrame = wp.media({
+            title: 'Select or Upload Media',
+            button: {
+                text: 'Use this media'
+            },
+            multiple: false
+        });
+
+        mediaFrame.on('select', function(){
+            var attachment = mediaFrame.state().get('selection').first().toJSON();
+            var imageUrl = attachment.url;
+
+            $('#selected-image').attr('src', imageUrl);
+            $('#selected-image-url').val(imageUrl);
+        });
+
+        mediaFrame.open();
+    });
+});
