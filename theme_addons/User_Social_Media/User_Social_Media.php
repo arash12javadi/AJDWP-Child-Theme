@@ -94,6 +94,26 @@ function extra_user_profile_fields() {
     
     </table>
 
+	<script>
+	
+	document.addEventListener("DOMContentLoaded", function() {
+	    const toggleBtn = document.getElementById('toggle-social-links');
+	    const table = document.getElementById('social-links-table');
+	
+	    toggleBtn.addEventListener('click', function(event) {
+	        event.preventDefault(); // Prevent the default button behavior
+	
+	        if (table.style.display === "none") {
+	            table.style.display = "table";
+	            toggleBtn.textContent = "-";
+	        } else {
+	            table.style.display = "none";
+	            toggleBtn.textContent = "+";
+	        }
+	    });
+	});
+		
+	</script>
 
 <?php 
 
