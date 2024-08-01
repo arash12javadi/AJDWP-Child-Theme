@@ -170,7 +170,24 @@ $showPhone = get_user_meta($userId, 'show_number', true);
                                     <label for="user_bio" class="fw-bold">Bio:</label>
                                     <textarea style="color: #7f0800;" name="user_bio" id="user_bio" rows="5" autocomplete="off"><?php echo esc_textarea($current_user->description); ?></textarea>
                                 </div>
-															
+				<script>
+					document.addEventListener("DOMContentLoaded", function() {
+					    const toggleBtn = document.getElementById('toggle-user-profile');
+					    const useDetailsDiv = document.getElementById('edit-user-details');
+					
+					    toggleBtn.addEventListener('click', function(event) {
+					        event.preventDefault(); // Prevent the default button behavior
+					
+					        if (useDetailsDiv.style.display === "none") {
+					            useDetailsDiv.style.display = "block";
+					            toggleBtn.textContent = "-";
+					        } else {
+					            useDetailsDiv.style.display = "none";
+					            toggleBtn.textContent = "+";
+					        }
+					    });
+					});
+				</script>
                                 <?php do_action('edit_user_social_media'); ?>
                                 <?php wp_nonce_field('update_user_info'); ?>
                                 <input type="submit" value="Update" name="submit_profile_update">
