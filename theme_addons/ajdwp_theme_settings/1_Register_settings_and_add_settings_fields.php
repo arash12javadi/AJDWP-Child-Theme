@@ -151,7 +151,7 @@ function AJDWP_Theme_settings_init() {
             'google_tag_manager' => '',
             'gtm_header_script' => '',
             'gtm_body_script' => '',
-            'secure_login' => '',
+            'secure_login' => 1,
             'post_publish_date' => 1,
             'page_publish_date' => 1,
         ];
