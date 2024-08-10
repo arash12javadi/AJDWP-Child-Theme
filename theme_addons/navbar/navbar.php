@@ -84,7 +84,7 @@ function AJDWP_search_modal_func() {
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
-                        <h4 class="modal-title">Seach </h4>
+                        <h4 class="modal-title">Search</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
