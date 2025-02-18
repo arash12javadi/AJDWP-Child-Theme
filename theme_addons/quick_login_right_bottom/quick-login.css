@@ -1,0 +1,111 @@
+/* Button used to open the contact form - fixed at the bottom of the page */
+.login-submit input[type="submit"] {
+  height: 55px !important;
+  border-radius: 5px !important;
+  border: 2px solid #d10d00;
+  color: #fff;
+  width: 100%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+.login-submit input[type="submit"]:hover {
+  background-color: green;
+  border: none;
+}
+.login-wrap {
+  background-color: #333;
+  border: none;
+  padding: 0;
+}
+.open-button {
+  background-color: #333;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+  z-index: 9 !important;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  /* border: 3px solid #f1f1f1; */
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 20px;
+  padding-bottom: 10px;
+  background-color: #333;
+  text-align: left;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Full-width input fields */
+
+/* When the inputs get focus, do something */
+.form-container input[type="text"]:focus,
+.form-container input[type="password"]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04aa6d;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* Add a #d10d00 background color to the cancel button */
+.form-container .cancel {
+  background-color: #333;
+  border: 2px solid #d10d00;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+/* Add some hover effects to buttons */
+.form-container,
+.open-button:hover {
+  opacity: 1;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+    rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+.form-container {
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.form-container h1 {
+  text-align: center;
+  text-shadow: 0px 3px 0px #b2a98f, 0px 7px 5px rgba(0, 0, 0, 0.15), 0px 12px 1px rgba(0, 0, 0, 0.1), 0px 17px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container .btn:hover {
+  background-color: #d10d00;
+  color: #fff;
+  border: none;
+}
+
+input#ql_username,
+input#ql_password {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  font-weight: bold;
+  color: #333;
+}

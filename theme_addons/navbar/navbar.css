@@ -1,124 +1,181 @@
 .fixed-top {
-    z-index: 100000 !important;
+  z-index: 100000 !important;
 }
 
-li.menu-item-has-children:hover > ul.dropdown-menu{
-    display:block;
+/* Make the menu item flex so <a> and <button> stay on the same line */
+li.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; /* Needed for absolute positioning of dropdown */
+  /* width: 100%; */
 }
 
-ul.dropdown-menu{
-    background-color: #222529;
-    border: none;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    border-top: 1px solid #9B9D9E;
-    z-index: 99999999 !important;
+/* Style the dropdown link (left side) */
+li.menu-item > a {
+  flex-grow: 1; /* Makes the link take up all available space on the left */
+  text-decoration: none;
+  padding: 10px 15px;
+  color: #fff; /* Adjust color as needed */
 }
 
-
-ul.dropdown-menu a{
-    color:#9B9D9E;
+/* Style the dropdown button (right side) */
+li.menu-item .mobile-toggler {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #fff; /* Adjust color */
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-ul.dropdown-menu a:hover{
-    background: transparent !important;
-    color:#C8C8C9;
+.mobile-toggler {
+  transition: transform 0.3s ease-in-out;
 }
 
-li.dropdown span.mobile-toggler{
-    display: inline-flex;
+.mobile-toggler.rotated {
+  transform: rotate(180deg);
 }
 
+button.mobile-toggler.d-block.d-lg-none {
+  rotate: 90deg;
+}
 
+/* Dropdown menu styles */
+li.menu-item .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: none; /* Hide by default */
+  background-color: #333; /* Adjust to match theme */
+  border-radius: 5px;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+/* Show dropdown when button is clicked */
+li.menu-item .dropdown-menu.show {
+  display: block;
+}
+
+/* Responsive fix for mobile */
+@media (max-width: 992px) {
+  li.menu-item {
+    flex-direction: row; /* Keep items in the same line */
+    align-items: center;
+  }
+
+  li.menu-item .mobile-toggler {
+    flex-shrink: 0; /* Prevents button from shrinking */
+  }
+}
+
+li.menu-item-has-children:hover > ul.dropdown-menu {
+  display: block;
+}
+
+ul.dropdown-menu {
+  background-color: #222529;
+  border: none;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top: 1px solid #9b9d9e;
+  z-index: 99999999 !important;
+}
+
+ul.dropdown-menu a {
+  color: #9b9d9e;
+}
+
+ul.dropdown-menu a:hover {
+  background: transparent !important;
+  color: #c8c8c9;
+}
 
 li.dropdown span.mobile-toggler {
-    display: none;
+  display: inline-flex;
+}
+
+li.dropdown span.mobile-toggler {
+  display: none;
 }
 
 .menu-wrap > li > a {
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 16px;
 }
-.menu-wrap > li > a:hover{
-    font-size: 16px;
+.menu-wrap > li > a:hover {
+  font-size: 16px;
 }
-
 
 .menu-item-has-children {
-    margin-right: 16px;
+  margin-right: 16px;
 }
-
 
 button.fa.fa-chevron-right {
-    background: none;
-    color: #9B9D9E;
-    rotate: 90deg;
+  background: none;
+  color: #9b9d9e;
+  rotate: 90deg;
 }
-
 
 .menu-wrap > li.dropdown > a:before {
-    content: '\f107';
-    font-family: FontAwesome;
-    position: absolute;
-    align-self: center;
-    right: 0;
-    display: flex;
-    align-items: center;
-    background: inherit;
-    font-size: 120%;
+  content: "\f107";
+  font-family: FontAwesome;
+  position: absolute;
+  align-self: center;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: inherit;
+  transition: transform 0.3s ease-in-out; /* Smooth rotation */
 }
 
-.AJDWP_avatar, .AJDWP_avatar_sm{
-    display: block;
-    text-align: center;
-    color: #C8C8C9;
-    padding: 0 1rem;
+.menu-wrap > li.dropdown:hover > a:before {
+  transform: rotate(180deg);
 }
 
-.AJDWP_avatar_sm{
-    display: none;
+.AJDWP_avatar,
+.AJDWP_avatar_sm {
+  display: block;
+  text-align: center;
+  color: #c8c8c9;
+  padding: 0 1rem;
 }
 
-div.AJDWP_avatar a>img,
-div.AJDWP_avatar_sm a>img
-{
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-
+.AJDWP_avatar_sm {
+  display: none;
 }
 
+div.AJDWP_avatar a > img,
+div.AJDWP_avatar_sm a > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
 
 img.custom-logo {
-    height: 70px;
-    width: 70px;
-    padding: 5px;
-    border-radius: 100px;
-    border: 2px solid #9B9D9E;
-    filter: invert(100%);
-    transition: transform .3s ease-in-out;
+  height: 70px;
+  width: 70px;
+  padding: 5px;
+  border-radius: 100px;
+  border: 2px solid #9b9d9e;
+  filter: invert(100%);
+  transition: transform 0.3s ease-in-out;
 }
 
-img.custom-logo:hover{
-    transform: rotate(360deg);
+img.custom-logo:hover {
+  transform: rotate(360deg);
 }
 
-li.current-menu-item > a{
-    text-shadow: 
-        0 0 7px #C8C8C9, 
-        0 0 10px #C8C8C9, 
-        0 0 21px #C8C8C9, 
-        0 0 42px #9B9D9E, 
-        0 0 82px #9B9D9E, 
-        0 0 92px #9B9D9E, 
-        0 0 102px #9B9D9E, 
-        0 0 151px #9B9D9E;
-    color:#e9e9e9 !important;
+li.current-menu-item > a {
+  text-shadow: 0 0 7px #c8c8c9, 0 0 10px #c8c8c9, 0 0 21px #c8c8c9, 0 0 42px #9b9d9e, 0 0 82px #9b9d9e, 0 0 92px #9b9d9e, 0 0 102px #9b9d9e, 0 0 151px #9b9d9e;
+  color: #e9e9e9 !important;
 }
-
-
-
 
 /* 
 ___________________________________________________________________________________
@@ -130,66 +187,53 @@ ________________________________________________________________________________
 
 */
 
+@media (max-width: 992px) {
+  .menu-wrap > li.dropdown > a:before {
+    display: none;
+  }
+  .menu-wrap > li > a {
+    align-self: center;
+  }
 
+  .menu-item-has-children {
+    margin-right: 0;
+  }
 
+  .menu-wrap > li.dropdown > a:before {
+    display: none;
+  }
 
+  li.dropdown span.mobile-toggler {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 10px;
+    margin-top: -30px;
+  }
 
+  form.d-flex {
+    margin-top: 20px;
+  }
 
-@media (max-width: 992px){
+  li.menu-item-has-children:hover > ul.dropdown-menu {
+    display: none;
+  }
 
-    .menu-wrap > li.dropdown > a:before{
-        display: none;
-    }
-    .menu-wrap > li > a {
-        align-self: center;
-    }
-    
-    .menu-item-has-children {
-        margin-right: 0;
-    }
-    
+  .AJDWP_avatar {
+    display: none;
+  }
 
-    .menu-wrap > li.dropdown > a:before{
-        display: none;
-    }
+  .AJDWP_avatar_sm {
+    display: block;
+    width: 15%;
+    padding: 0;
+  }
 
-
-    li.dropdown span.mobile-toggler {
-        display: flex;
-        justify-content: end;
-        margin-bottom: 10px;
-        margin-top: -30px;    
-    }
-
-    form.d-flex {
-        margin-top: 20px;
-    }
-
-
-    li.menu-item-has-children:hover > ul.dropdown-menu{
-        display:none;
-    }
-
-
-    .AJDWP_avatar{
-        display: none;
-    }
-
-    .AJDWP_avatar_sm{
-        display: block;
-        width: 15%;
-        padding: 0;
-    }
-
-
-    .navbar-collapse {
-        border-top: 1px solid #9B9D9E;
-        padding-top: 10px;
-        margin-top: 15px;
-    }
-
+  .navbar-collapse {
+    border-top: 1px solid #9b9d9e;
+    padding-top: 10px;
+    margin-top: 15px;
+  }
 }
-
 
 /* 
 ___________________________________________________________________________________
@@ -201,97 +245,93 @@ ________________________________________________________________________________
 
 */
 
-
 span.count-minicart {
-    font-weight: bolder;
-    font-size: 12px;
-    background-color: #fff;
-    padding: 0px;
-    border-radius: 50px;
-    margin-left: 20px;
-    display: flex;
-    padding-right: 5px;
-    padding-left: 5px;
-    margin-bottom: -10px;
-    text-align: center;
-    justify-content: center;
-}  
-
+  font-weight: bolder;
+  font-size: 12px;
+  background-color: #fff;
+  padding: 0px;
+  border-radius: 50px;
+  margin-left: 20px;
+  display: flex;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-bottom: -10px;
+  text-align: center;
+  justify-content: center;
+}
 
 .dropdown-toggle::after {
-    display: none !important;
+  display: none !important;
 }
 
 i.minicart-icon {
-    font-size: 30px !important;
-    cursor: pointer;
+  font-size: 30px !important;
+  cursor: pointer;
 }
 i.minicart-icon_2 {
-    font-size: 30px !important;
-    cursor: pointer;
+  font-size: 30px !important;
+  cursor: pointer;
 }
 
 .minicart-wrapper {
-    margin-top: -10px !important;
+  margin-top: -10px !important;
 }
 .minicart-wrapper_2 {
-    margin-top: -10px !important;
+  margin-top: -10px !important;
 }
 
 .mini_cart_and_sum {
-    display: flex;
-} 
+  display: flex;
+}
 
 .currency_for_cart_sum {
-    width: 70px;
-    align-self: center;
-    cursor: pointer;
+  width: 70px;
+  align-self: center;
+  cursor: pointer;
 }
 .mini_cart_and_sum_2 {
-    display: flex;
-} 
+  display: flex;
+}
 
 .currency_for_cart_sum_2 {
-    width: 70px;
-    align-self: center;
-    cursor: pointer;
+  width: 70px;
+  align-self: center;
+  cursor: pointer;
 }
 
-
-.currency_for_cart_sum{
-    color: #fff;
-    width: 85px;
-    cursor: pointer;
-    text-align: center;
+.currency_for_cart_sum {
+  color: #fff;
+  width: 85px;
+  cursor: pointer;
+  text-align: center;
 }
-.currency_for_cart_sum_2{
-    color: #fff;
-    width: 85px;
-    cursor: pointer;
-    text-align: center;
-}
-
-@media (max-width: 992px){
-    .mini_cart_and_sum {
-        display: flex;
-        padding-left: 20px;
-        padding-top: 20px;
-    }
-
-    .currency_for_cart_sum{
-        width: auto;
-    }
-    .mini_cart_and_sum_2 {
-        display: flex;
-        padding-left: 20px;
-        padding-top: 20px;
-    }
-
-    .currency_for_cart_sum_2{
-        width: auto;
-    }
+.currency_for_cart_sum_2 {
+  color: #fff;
+  width: 85px;
+  cursor: pointer;
+  text-align: center;
 }
 
+@media (max-width: 992px) {
+  .mini_cart_and_sum {
+    display: flex;
+    padding-left: 20px;
+    padding-top: 20px;
+  }
+
+  .currency_for_cart_sum {
+    width: auto;
+  }
+  .mini_cart_and_sum_2 {
+    display: flex;
+    padding-left: 20px;
+    padding-top: 20px;
+  }
+
+  .currency_for_cart_sum_2 {
+    width: auto;
+  }
+}
 
 /* 
 ___________________________________________________________________________________
@@ -303,14 +343,14 @@ ________________________________________________________________________________
 
 */
 
-@media (min-width: 992px){
-    .AJDWP_search_form{
-        display: none;
-    }
+@media (min-width: 992px) {
+  .AJDWP_search_form {
+    display: none;
+  }
 }
 
-@media (max-width: 992px){
-    .AJDWP_search_modal{
-        display: none;
-    }
+@media (max-width: 992px) {
+  .AJDWP_search_modal {
+    display: none;
+  }
 }

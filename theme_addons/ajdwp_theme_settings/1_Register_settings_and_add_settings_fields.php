@@ -21,6 +21,7 @@ function AJDWP_Theme_settings_init() {
     );
 
     $functions = [
+        'show_page_title' => 'Show Page or Post Title',
         'like_follow_system' => 'Add Like & Follow to Theme',
         'post_views' => 'Post and Page View Counter',
         'post_publish_date' => 'Post Publish Date',
@@ -111,6 +112,7 @@ function AJDWP_Theme_settings_init() {
     $options = get_option('AJDWP_theme_options');
     if ($options === false) {
         $default_options = [
+            'show_page_title' => 1,
             'like_follow_system' => 1,
             'theme_sidebars' => 1,
             'disable_yoast_metabox' => 1,
@@ -305,13 +307,13 @@ function enqueue_admin_scripts() {
         null
     );
 
-    // Enqueue Bootstrap CSS from a CDN
-    wp_enqueue_style(
-        'bootstrap-css',
-        'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css',
-        array(),
-        '4.5.2'
-    );
+    // Enqueue Bootstrap CSS from a CDN // Extra bootstrap unneeded for this task removed on 17.02.2025
+    // wp_enqueue_style(
+    //     'bootstrap-css',
+    //     'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css',
+    //     array(),
+    //     '4.5.2'
+    // );
 
     // Localize script to add Role Comparison Table
     wp_localize_script('ajdwp-admin-scripts', 'RoleComparisonTable', array(

@@ -1,12 +1,13 @@
-<?php 
+<?php
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
 //-------------------- Add JavasCript to Admin Side --------------------//
 
-function enqueue_cookie_policy_toggle_script() {
+function enqueue_cookie_policy_toggle_script()
+{
     // Enqueue scripts and styles for the admin area
     if (is_admin()) {
         // Enqueue admin script
@@ -22,8 +23,8 @@ function enqueue_cookie_policy_toggle_script() {
         wp_enqueue_style('cookie_policy_admin_side_style', get_stylesheet_directory_uri() . '/theme_addons/cookie_policy/cookie_policy_admin_side.css', array(), null);
     } else {
         // Enqueue Bootstrap CSS and JS only for the front-end
-        wp_enqueue_style('bootstrap-css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
-        wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', array('jquery'), null, true);
+        // wp_enqueue_style('bootstrap-css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+        // wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', array('jquery'), null, true);
 
         // Enqueue front-end script
         wp_enqueue_script('frontend-cookie-policy', get_stylesheet_directory_uri() . '/theme_addons/cookie_policy/cookie_policy_frontend.js', array('jquery'), null, true);
@@ -43,7 +44,8 @@ add_action('admin_enqueue_scripts', 'enqueue_cookie_policy_toggle_script');
 //			                Create Privacy Notice Page
 //__________________________________________________________________________//
 
-function create_privacy_page_once() {
+function create_privacy_page_once()
+{
     $file_path = get_stylesheet_directory() . '/theme_addons/cookie_policy/policy.html';
     $policy_content = file_get_contents($file_path);
     $page_definitions = array(
@@ -75,7 +77,8 @@ function create_privacy_page_once() {
 
 add_action('init', 'privacy_page_creation_trigger');
 
-function privacy_page_creation_trigger() {
+function privacy_page_creation_trigger()
+{
     if (isset($_GET['privacy_notice_page']) && $_GET['privacy_notice_page'] === 'true') {
         create_privacy_page_once();
         // Redirect back to the admin dashboard or any other page
@@ -91,7 +94,8 @@ function privacy_page_creation_trigger() {
 //__________________________________________________________________________//
 
 
-function display_cookie_popup() {
+function display_cookie_popup()
+{
     // Get the status of the cookie popup from the database
     $enabled = get_option('cookies_popup_enabled', 'no'); // Default to 'no'
 
@@ -106,7 +110,7 @@ function display_cookie_popup() {
     }
 
     // Default link for 'Read more' if none is set
-    $default_cookie_popup_link = home_url( 'privacy-notice' ); 
+    $default_cookie_popup_link = home_url('privacy-notice');
 
     $cookie_popup_link = get_option('cookie_popup_link', '');
     // Use default link if the retrieved link is empty
@@ -116,7 +120,7 @@ function display_cookie_popup() {
 
     // Check if the popup is enabled
     if ($enabled === 'yes') {
-        ?>
+?>
         <div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="cookieModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -133,11 +137,16 @@ function display_cookie_popup() {
             </div>
         </div>
         <style>
-            #cookieModal .modal-header { border-bottom: none; }
-            #cookieModal .modal-footer { border-top: none; }
+            #cookieModal .modal-header {
+                border-bottom: none;
+            }
+
+            #cookieModal .modal-footer {
+                border-top: none;
+            }
         </style>
 
-        <?php
+<?php
     }
 }
 add_action('wp_footer', 'display_cookie_popup');
@@ -148,7 +157,8 @@ add_action('wp_footer', 'display_cookie_popup');
 add_action('wp_ajax_update_cookie_popup_setting', 'update_cookie_popup_setting');
 add_action('wp_ajax_get_cookie_popup_setting', 'get_cookie_popup_setting');
 
-function update_cookie_popup_setting() {
+function update_cookie_popup_setting()
+{
     // Verify nonce for security
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cookie_popup_nonce')) {
         wp_send_json_error('Invalid nonce');
@@ -166,7 +176,8 @@ function update_cookie_popup_setting() {
     wp_send_json_success('Setting updated');
 }
 
-function get_cookie_popup_setting() {
+function get_cookie_popup_setting()
+{
     // Verify nonce for security
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cookie_popup_nonce')) {
         wp_send_json_error('Invalid nonce');
@@ -185,11 +196,10 @@ function get_cookie_popup_setting() {
 
 
 
-function ajdwp_register_theme_settings() {
+function ajdwp_register_theme_settings()
+{
     register_setting('ajdwp_theme_options_group_text', 'cookie_popup_text');
     register_setting('ajdwp_theme_options_group_link', 'cookie_popup_link');
 }
 
 add_action('admin_init', 'ajdwp_register_theme_settings');
-
-
