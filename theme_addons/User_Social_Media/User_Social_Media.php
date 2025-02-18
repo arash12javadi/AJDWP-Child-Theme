@@ -193,10 +193,7 @@ function User_Social_Media_func(){
 
 </div>
 
-<?php } ?>
-
-
-<?php 
+<?php } 
 
 function has_social_media_links() {
     $author_id = get_queried_object_id(); // This gets the author ID from the author archive page
