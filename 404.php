@@ -1,73 +1,35 @@
-<?php 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
-?>
-<?php get_header(); ?>
+<?php
 
-<style>
+/**
+ * The template for displaying 404 pages (not found)
+ */
 
-/*======================
-		404 page
-=======================*/
-
-
-.page_404{ 
-    padding:40px 0; background:#fff; font-family: 'Arvo', serif;
+if (! defined('ABSPATH')) {
+	exit;
 }
 
-.page_404  img{ width:100%;}
-
-.four_zero_four_bg{
-    /* background-image: url(https://arashjavadi.com/wp-content/uploads/2023/12/arashjavadi.com-caveman-gif-animation-page-404.gif); */
-    background-image: url('<?php echo get_stylesheet_directory_uri(); ?>/caveman-gif-animation-page-404.gif');
-    height: 500px;
-    background-position: center;
-}
-
-
-.four_zero_four_bg h1{
-    font-size:80px;
-}
-
-.four_zero_four_bg h3{
-    font-size:80px;
-}
-
-.link_404{			 
-	color: #fff!important;
-    padding: 10px 20px;
-    background: #39ac31;
-    margin: 20px 0;
-    display: inline-block;
-}
-.contant_box_404{ margin-top:-50px;}
-
-</style>
-
+get_header(); ?>
 
 <section class="page_404 ">
 	<div class="container">
-		<div class="row d-flex justify-content-center ">	
-		<div class="col-sm-9 d-flex justify-content-center">
-		<div class="col-sm-10 col-sm-offset-1  text-center">
-		<div class="four_zero_four_bg">
-			<h1 class="text-center ">404</h1>
-		
-		
-		</div>
-		
-		<div class="contant_box_404">
-		<h3 class="h2">
-		Look like you're lost
-		</h3>
-		
-		<p>the page you are looking for not avaible!</p>
-		
-		<a href="<?php echo get_home_url();?>" class="link_404">Go to Home</a>
-	</div>
-		</div>
-		</div>
+		<div class="row d-flex justify-content-center ">
+			<div class="col-sm-9 d-flex justify-content-center">
+				<div class="col-sm-10 col-sm-offset-1 text-center">
+					<div class="d-flex justify-content-center">
+						<?php get_search_form(); ?>
+					</div>
+					<div class="four_zero_four_bg">
+						<h1 class="text-center ">404</h1>
+					</div>
+					<div class="contant_box_404">
+						<h2 class="h2">
+							Look like you're lost
+						</h2>
+						<p>the page you are looking for not availble!</p>
+						<a aria-label="Link to Homepage" href="<?php echo esc_url(home_url('/')); ?>" class="link_404">Go to Home</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
