@@ -103,7 +103,7 @@ $options = get_option('AJDWP_theme_options');
              */
             ?>
             <div class="row border-top py-4 d-flex align-items-center">
-                <div class="col-8 justify-content-start d-inline-flex">
+                <div class="col-sm-8 justify-content-start d-inline-flex">
 
                     <!-- Like Buttons / Social for Non-Pages -->
                     <?php if (!is_page()) : ?>
@@ -161,7 +161,7 @@ $options = get_option('AJDWP_theme_options');
 
                 <!-- Post Views (if enabled) -->
                 <?php if (!empty($options['post_views'])) : ?>
-                    <div class="col-4 px-lg-4 text-end AJDWP-theme-view-counter">
+                    <div class="col-sm-4 p-4 text-end AJDWP-theme-view-counter">
                         <?php echo esc_html(getPostViews(get_the_ID())); ?>
                     </div>
                 <?php endif; ?>
