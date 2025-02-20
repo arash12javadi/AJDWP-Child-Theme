@@ -72,7 +72,9 @@ ob_end_clean();
                         <div class="follow_edit d-flex justify-content-between">
                             <!-- Follow Button -->
                             <div>
-                                <?php if (is_user_logged_in()) { do_action('AJDWP_like_follow_social'); } ?>
+                                <?php if (is_user_logged_in()) {
+                                    do_action('AJDWP_like_follow_social');
+                                } ?>
                             </div>
 
                             <!-- User Profile Edit Info in Modal -->
@@ -88,13 +90,13 @@ ob_end_clean();
                             <!-- User Avatar -->
                             <div class="d-flex align-items-center justify-content-center my-3">
                                 <?php
-                                    $custom_avatar_url = get_user_meta($userId, 'custom_avatar_url', true);
+                                $custom_avatar_url = get_user_meta($userId, 'custom_avatar_url', true);
 
-                                    if (!empty($custom_avatar_url)) {
-                                        echo '<img src="' . esc_url($custom_avatar_url) . '" alt="Avatar" class="rounded-circle border shadow" style="width:200px; height:200px;">';
-                                    } else {
-                                        echo get_avatar($author_email, 200, null, null, array('class' => array('rounded-circle border shadow')));
-                                    }
+                                if (!empty($custom_avatar_url)) {
+                                    echo '<img src="' . esc_url($custom_avatar_url) . '" alt="Avatar" class="rounded-circle border shadow" style="width:200px; height:200px;">';
+                                } else {
+                                    echo get_avatar($author_email, 200, null, null, array('class' => array('rounded-circle border shadow')));
+                                }
                                 ?>
                             </div>
 
@@ -104,116 +106,122 @@ ob_end_clean();
                             </div>
 
                             <!-- Post Count -->
-                        <?php 
+                            <?php
                             $author_id = get_queried_object_id(); // This gets the author ID from the author archive page
                             // Retrieve user data
                             $user_data = get_userdata($author_id);
                             // Check if the user has the 'subscriber' role
-                            if (!in_array('subscriber', (array) $user_data->roles)) { 
-                        ?>
-                            <div class="d-flex align-items-center justify-content-center font-weight-bold h6">
-                                <?php echo "Total Posts: (" . $post_count . ")"; ?>
-                            </div>
-                        <?php } ?>
-                        
+                            if (!in_array('subscriber', (array) $user_data->roles)) {
+                            ?>
+                                <div class="d-flex align-items-center justify-content-center font-weight-bold h6">
+                                    <?php echo "Total Posts: (" . $post_count . ")"; ?>
+                                </div>
+                            <?php } ?>
+
                             <?php
                             // Get the user description
                             $user_description = get_the_author_meta('description');
 
                             // Check if the description is not empty
                             if (!empty($user_description)) : ?>
-                                    <div class="d-flex align-items-center justify-content-start mt-4 pt-4 border-top border-light font-weight-bold h5 aaaaa">
-                                        <?php echo "About me: "; ?>
-                                    </div>
-                                    <div class="text-left justify-content-start">
-                                        <?php echo esc_html($user_description); ?>
-                                    </div>
+                                <div class="d-flex align-items-center justify-content-start mt-4 pt-4 border-top border-light font-weight-bold h5 aaaaa">
+                                    <?php echo "About me: "; ?>
+                                </div>
+                                <div class="text-left justify-content-start">
+                                    <?php echo esc_html($user_description); ?>
+                                </div>
                             <?php endif; ?>
 
-                        
-                        <?php if ($showPhone === 'yes' && $showEmail === 'yes') { ?>
 
-                            <div class="text-left justify-content-start mt-4 pt-4 border-top border-light"></div>
+                            <?php if ($showPhone === 'yes' && $showEmail === 'yes') { ?>
 
-                            <!-- Email Address -->
-                            <div class="user_profile_email_div">
-                                <?php if ($showEmail === 'yes') { ?>
-                                    <div class="font-weight-bold h5">
-                                        <?php echo "Email me: "; ?>
-                                    </div>
-                                    <div class="text-left justify-content-start">
-                                        <p>
-                                            <a href="mailto:<?php echo esc_attr(get_the_author_meta('user_email')); ?>">
-                                                <?php echo esc_html(get_the_author_meta('user_email')); ?>
+                                <div class="text-left justify-content-start mt-4 pt-4 border-top border-light"></div>
+
+                                <!-- Email Address -->
+                                <div class="user_profile_email_div">
+                                    <?php if ($showEmail === 'yes') { ?>
+                                        <div class="font-weight-bold h5">
+                                            <?php echo "Email me: "; ?>
+                                        </div>
+                                        <div class="text-left justify-content-start">
+                                            <p>
+                                                <a href="mailto:<?php echo esc_attr(get_the_author_meta('user_email')); ?>">
+                                                    <?php echo esc_html(get_the_author_meta('user_email')); ?>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="user_profile_number_div">
+                                    <?php if ($showPhone === 'yes') { ?>
+                                        <div class="font-weight-bold h5">
+                                            <?php echo "Call me: "; ?>
+                                        </div>
+                                        <div>
+                                            <a href="tel:<?php echo esc_attr(get_the_author_meta('phone_number')); ?>">
+                                                <?php echo esc_html(get_the_author_meta('phone_number')); ?>
                                             </a>
-                                        </p>
-                                    </div>
-                                <?php } ?>
-                            </div>
-
-                            <!-- Phone Number -->
-                            <div class="user_profile_number_div">
-                                <?php if ($showPhone === 'yes') { ?>
-                                    <div class="font-weight-bold h5">
-                                        <?php echo "Call me: "; ?>
-                                    </div>
-                                    <div>
-                                        <a href="tel:<?php echo esc_attr(get_the_author_meta('phone_number')); ?>">
-                                            <?php echo esc_html(get_the_author_meta('phone_number')); ?>
-                                        </a>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        <?php } ?>
-                        <?php if (has_social_media_links()) { ?>
-                            <div class="text-left justify-content-start mt-4 pt-4 border-top border-light"></div>
-                            <!-- Social Media -->
-                            <?php do_action("User_Social_Media"); ?>
-                        <?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (has_social_media_links()) { ?>
+                                <div class="text-left justify-content-start mt-4 pt-4 border-top border-light"></div>
+                                <!-- Social Media -->
+                                <?php do_action("User_Social_Media"); ?>
+                            <?php } ?>
                             <!-- Total Follow, Likes, and Profile Views -->
                             <?php if (!is_page()) { ?>
                                 <div class="like_follow_social border-top mt-4 py-4 d-flex justify-content-center align-items-center">
-                                <?php 
+                                    <?php
                                     $options = get_option('AJDWP_theme_options');
-                                    if(!empty($options['like_follow_system'])){
-                                ?>
-                                    <?php echo "Total Followers: &nbsp" . esc_html($totalfollow); ?>
-                                    <div class="vr mx-4"></div>
-                                    Like Score: <?php echo esc_html($author_posts_total_likes); ?>
+                                    if (!empty($options['like_follow_system'])) {
+                                    ?>
+                                        <?php echo "Total Followers: &nbsp" . esc_html($totalfollow); ?>
+                                        <div class="vr mx-4"></div>
+                                        Like Score: <?php echo esc_html($author_posts_total_likes); ?>
 
-                                <?php }//end if(!empty($options['like_follow_system'])){ ?>
-                                <?php 
+                                    <?php } //end if(!empty($options['like_follow_system'])){ 
+                                    ?>
+                                    <?php
                                     $options = get_option('AJDWP_theme_options');
-                                    if (!empty($options['post_views'])) { 
-                                ?>
-                                    <div class="vr mx-4" <?php $options = get_option('AJDWP_theme_options'); if (empty($options['like_follow_system'])) {echo'style="display:none;"'; } ?>></div>            
-                                    Profile visit: <?php echo esc_html(get_author_views(get_queried_object_id())); ?>
-                                <?php } //end if (!empty($options['post_views'])) {  ?>    
+                                    if (!empty($options['post_views'])) {
+                                    ?>
+                                        <div class="vr mx-4" <?php $options = get_option('AJDWP_theme_options');
+                                                                if (empty($options['like_follow_system'])) {
+                                                                    echo 'style="display:none;"';
+                                                                } ?>></div>
+                                        Profile visit: <?php echo esc_html(get_author_views(get_queried_object_id())); ?>
+                                    <?php } //end if (!empty($options['post_views'])) {  
+                                    ?>
                                 </div>
-                                
-                            <?php } //end if (!is_page()) { ?>
 
-                        <?php 
+                            <?php } //end if (!is_page()) { 
+                            ?>
+
+                            <?php
                             $options = get_option('AJDWP_theme_options');
-                            if(!empty($options['like_follow_system'])){
-                        ?>
+                            if (!empty($options['like_follow_system'])) {
+                            ?>
 
-                            <!-- Followers -->
-                            <div class="d-block border-top pt-4">
-                                <p>Followers:</p>
-                            </div>
+                                <!-- Followers -->
+                                <div class="d-block border-top pt-4">
+                                    <p>Followers:</p>
+                                </div>
 
-                            <div class="authors_followers">
-                                <?php
-                                if (count($query_fetch) > 0) {
-                                    foreach ($query_fetch as $row) {
-                                        if (!empty(get_userdata($row->followee_id))) {
-                                ?>
-                                            <div class="m-1 border border-1 rounded d-inline-block">
-                                                <a href="<?php echo esc_url(get_author_posts_url($row->followee_id)); ?>">
-                                                    <div class="g-0 d-flex justify-content-start align-items-center">
-                                                        <div>
-                                                            <?php
+                                <div class="authors_followers">
+                                    <?php
+                                    if (count($query_fetch) > 0) {
+                                        foreach ($query_fetch as $row) {
+                                            if (!empty(get_userdata($row->followee_id))) {
+                                    ?>
+                                                <div class="m-1 border border-1 rounded d-inline-block">
+                                                    <a href="<?php echo esc_url(get_author_posts_url($row->followee_id)); ?>">
+                                                        <div class="g-0 d-flex justify-content-start align-items-center">
+                                                            <div>
+                                                                <?php
                                                                 $like_follow_custom_avatar_url = get_user_meta($row->followee_id, 'custom_avatar_url', true);
 
                                                                 if (!empty($like_follow_custom_avatar_url)) {
@@ -221,23 +229,23 @@ ob_end_clean();
                                                                 } else {
                                                                     echo get_avatar($row->followee_id, 50, null, null, array('class' => array('img-fluid rounded-start')));
                                                                 }
-                                                            ?>
+                                                                ?>
+                                                            </div>
+                                                            <div class="px-2">
+                                                                <span class="card-title"><?php echo esc_html(get_userdata($row->followee_id)->display_name); ?></span>
+                                                            </div>
                                                         </div>
-                                                        <div class="px-2">
-                                                            <span class="card-title"><?php echo esc_html(get_userdata($row->followee_id)->display_name); ?></span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                <?php
+                                                    </a>
+                                                </div>
+                                    <?php
+                                            }
                                         }
+                                    } else {
+                                        echo "No followers yet.";
                                     }
-                                } else {
-                                    echo "No followers yet.";
-                                }
-                                ?>
-                            </div>
-                        <?php } ?>
+                                    ?>
+                                </div>
+                            <?php } ?>
 
                         </div>
                     </div>
@@ -250,7 +258,7 @@ ob_end_clean();
                             <div class="row">
                                 <?php if (have_posts()) : ?>
                                     <?php while (have_posts()) : the_post(); ?>
-                                        <article id="post-<?php the_ID(); ?>" <?php post_class('post-items shadow rounded mb-3'); ?>>
+                                        <article id="post-<?php the_ID(); ?>" <?php post_class('post-items shadow rounded'); ?>>
                                             <div class="row mb-4 mt-4">
                                                 <div class="post-date-author col-lg-4">
                                                     <div class="d-flex align-items-center justify-content-start">

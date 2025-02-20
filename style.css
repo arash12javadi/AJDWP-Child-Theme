@@ -5,7 +5,7 @@ Description:  A Child For Hello Elementor Theme By AJDWP
 Author:       Arash Javadi
 Author URI:   https://arashjavadi.com
 Template:     hello-elementor
-Version:      250220
+Version:      250221
 /* 
 ___________________________________________________________________________________
 ___________________________________________________________________________________
@@ -117,7 +117,7 @@ nav.navigation > div.nav-links > .current {
 /* ----------------------------- REPLY FORM --------------------------------- */
 
 div.comment-respond {
-  padding: 3rem;
+  padding: 20px;
   background-color: #333;
   justify-content: center;
   display: grid;
